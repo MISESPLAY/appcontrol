@@ -3,27 +3,19 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Settings\Persistence\Eloquent\Setting;
+use App\Models\Settings\Persistence\Eloquent\Models\SettingsModel as settings;
+ 
+
 
 class SettingsSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        /* 
-            Modulos
-            1 = LOGIN AND REGISTER
-            2 = EVENTOS
-            3 = ORGANIGRAMA 
-        */
-
         $settings = [
             [
                 'module' => '3',
                 'key'    => 'field_requieredByBD',
-                'value'  => '["name","email","password"]',
+                'value'  => '["FirstName","LastName","department","department_id","reports_to_id"]',
             ],
             [
                 'module' => '1',
@@ -44,7 +36,7 @@ class SettingsSeeder extends Seeder
                     'key'    => $setting['key'],
                 ],
                 [
-                    'value'  => $setting['value'],
+                    'value' => $setting['value'],
                 ]
             );
         }

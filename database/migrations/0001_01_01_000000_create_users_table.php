@@ -13,10 +13,23 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+
+            // Basic user info
             $table->string('name');
+            $table->string('username')->unique();
+            $table->string('FirstName')->nullable();
+            $table->string('LastName')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+
+            // New fields requested
+            $table->string('department')->nullable();
+            $table->unsignedBigInteger('department_id')->nullable();
+            $table->string('reports_to')->nullable();
+            $table->unsignedBigInteger('reports_to_id')->nullable();
+
+            // Laravel tokens + timestamps
             $table->rememberToken();
             $table->timestamps();
         });

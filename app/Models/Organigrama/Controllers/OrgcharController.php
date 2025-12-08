@@ -28,4 +28,11 @@ class OrgcharController extends Controller
             $this->orgCharManager->getHierarchy()
         );
     }
+
+    public function returnColors(): JsonResponse
+    {
+        return response()->json(
+            $this->orgCharManager->getColorsforDepartment()
+        );
+    }
 }

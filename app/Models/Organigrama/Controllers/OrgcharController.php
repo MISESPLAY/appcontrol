@@ -35,4 +35,18 @@ class OrgcharController extends Controller
             $this->orgCharManager->getColorsforDepartment()
         );
     }
+    public function updateColors(Request $request)
+{
+    // Validamos que venga un mapa { "Software": "#000000", ... }
+    $validated = $request->validate([
+        'colors' => 'required|array'
+    ]);
+
+    $updated = $this->orgCharManager->updateDepartmentColors($validated['colors']);
+
+    return response()->json([
+        'success' => true,
+        'colors' => $updated
+    ]);
+}
 }

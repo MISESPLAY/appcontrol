@@ -64,16 +64,5 @@ class FormatDataOrgChart
         return $structure;
     }
 
-    public function formatColors(array $departments): array
-    {
-        $deptColors = [];
 
-        foreach ($departments as $dept) {
-            if (isset($dept['department']) && isset($dept['color'])) {
-                $deptColors[$dept['department']] = $dept['color'];
-            }
-        }
-
-        return $deptColors;
-    }
 }

@@ -12,6 +12,8 @@ class OrgCharManager
     protected SettingRepository $settingRepository;
     protected FormatDataOrgChart $formatter;
     protected DepartmentRepository $departmentRepository;
+     const SETTING_KEY_COLORS = 'DepartmentsColor';
+     const SETTING_MODULE = '8';
 
     public function __construct(UserRepository $userRepository, SettingRepository $settingRepository, FormatDataOrgChart $formatter, DepartmentRepository $departmentRepository)
     {
@@ -59,7 +61,11 @@ class OrgCharManager
     $departments = $this->departmentRepository->getOnlyDepartments();
 
     // SETTINGS: Colores configurados en DB
-    $colors_json = $this->settingRepository->findSetting('8', 'DepartmentColors');
+    $colors_json = $this->settingRepository->findSetting(self::SETTING_MODULE, self::SETTING_KEY_COLORS);
+
+     
+logger('JSON crudo desde settings:', [$colors_json]);
+
     $configuredColors = json_decode($colors_json, true);
 
     if (!is_array($configuredColors)) {
@@ -75,20 +81,23 @@ private function formatColors(array $departments, array $configuredColors): arra
     foreach ($departments as $dept) {
         $name = $dept['department'];
 
-        // Si el departamento existe en settings, úsalo
-        if (isset($configuredColors[$name])) {
-            $result[$name] = $configuredColors[$name];
-        }
-        // De lo contrario asigna color default
-        else {
-            $result[$name] = "#000000"; 
-        }
+        // Usa el color configurado, si existe. De lo contrario, usa default.
+        $result[$name] = $configuredColors[$name] ?? "#000000";
     }
 
     return $result;
 }
 
+public function updateDepartmentColors(array $colors): array
+{
+    // Guardar JSON en settings
+    $jsonColors = json_encode($colors, JSON_UNESCAPED_UNICODE);
+
+    $this->settingRepository->updateSetting('8', 'DepartmentColors', $jsonColors);
+
+    // Volvemos a cargar y formatear (para asegurar que está bien)
+    return $this->getColorsforDepartment();
+}
 
 
-    
 }

@@ -45,4 +45,17 @@ class SettingRepository implements SettingRepositoryInterface
             ->where('key', $key)
             ->value('value');
     }
+    public function updateSetting(string $module, string $key, string $value): bool
+{
+    return Setting::updateOrCreate(
+        [
+            'module' => $module,
+            'key'    => $key,
+        ],
+        [
+            'value' => $value
+        ]
+    ) ? true : false;
+}
+
 }

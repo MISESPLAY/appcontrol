@@ -16,12 +16,14 @@ class OrgcharController extends Controller
         $this->orgCharManager = $orgCharManager;
     }
 
-    
     public function index()
     {
-        return view('organigrama.index');
+        return view('index');
     }
 
+    /**
+     * Retorna la jerarquía de empleados formateada para el organigrama.
+     */
     public function returnOrg(): JsonResponse
     {
         return response()->json(
@@ -29,24 +31,34 @@ class OrgcharController extends Controller
         );
     }
 
+    /**
+     * Retorna el mapa de colores actuales por departamento.
+     */
     public function returnColors(): JsonResponse
     {
         return response()->json(
             $this->orgCharManager->getColorsforDepartment()
         );
     }
-    public function updateColors(Request $request)
-{
-    // Validamos que venga un mapa { "Software": "#000000", ... }
-    $validated = $request->validate([
-        'colors' => 'required|array'
-    ]);
 
-    $updated = $this->orgCharManager->updateDepartmentColors($validated['colors']);
+    /**
+     * Recibe los nuevos colores, valida y solicita la actualización.
+     * Espera un JSON: { "colors": { "Marketing": "#FF0000", ... } }
+     */
+    public function updateColorsDepartment(Request $request): JsonResponse
+    {
+        // 1. Validación estricta de entrada
+        $validated = $request->validate([
+            'colors' => 'required|array'
+        ]);
 
-    return response()->json([
-        'success' => true,
-        'colors' => $updated
-    ]);
-}
+        // 2. Delegar la lógica al Manager
+        $updated = $this->orgCharManager->updateDepartmentColors($validated['colors']);
+
+        // 3. Responder al cliente
+        return response()->json([
+            'success' => true,
+            'colors' => $updated // Retornamos los datos actualizados para confirmar
+        ]);
+    }
 }

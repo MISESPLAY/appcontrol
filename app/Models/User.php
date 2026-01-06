@@ -6,10 +6,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Departments\Persistence\Eloquent\Models\DepartmentModel;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */  
+    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     /**
@@ -21,6 +22,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        // AGREGA ESTOS CAMPOS NUEVOS:
+        'username',
+        'FirstName',
+        'LastName',
+        'department_id',
+        'reports_to_id',
+        'reports_to', // Si lo estás guardando como texto también
     ];
 
     /**
@@ -45,4 +53,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-}
+
+    public function department()
+    {
+
+        return $this->belongsTo(DepartmentModel::class, 'department_id');
+    }}

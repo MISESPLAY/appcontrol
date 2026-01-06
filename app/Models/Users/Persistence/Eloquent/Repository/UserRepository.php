@@ -13,7 +13,9 @@ class UserRepository implements UserRepositoryInterface
 
     public function employees(): array
     {
-        return User::whereNotNull('reports_to_id')->get()->toArray();
+        return User::with('department', "department")
+            ->get()
+            ->toArray();
     }
 
     public function managers(): array
@@ -26,3 +28,5 @@ class UserRepository implements UserRepositoryInterface
         return User::where('department', $department)->get()->toArray();
     }
 }
+
+

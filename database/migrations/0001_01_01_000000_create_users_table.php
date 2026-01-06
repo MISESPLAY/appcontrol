@@ -24,7 +24,6 @@ return new class extends Migration
             $table->string('password');
 
             // New fields requested
-            $table->string('department')->nullable();
             $table->unsignedBigInteger('department_id')->nullable();
             $table->string('reports_to')->nullable();
             $table->unsignedBigInteger('reports_to_id')->nullable();
